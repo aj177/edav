@@ -1,0 +1,17 @@
+{
+    "contents" : "library(ggplot2)\nlibrary (plyr)\nlibrary(KernSmooth)\n\n#SUCCESS METRICS\ndf = read.csv(\"~/Desktop/STAT_project/sLB.csv\")\n\n#subset the dataframe on conditions\ndf_ND = subset(df, Donor==0)\ndf_ND = subset (df, Age < 46)\ndf_ND$row.names = NULL\n\n# replace NaN with mean for that group\nimpute.mean = function(x) replace(x, is.na(x), mean(x, na.rm = TRUE))\ndf_ND_m <- ddply(df_ND, ~ Year, transform, B_rate = impute.mean(B_rate))\n\n#kernel density plot\nx = df_ND_m$B_rate\nest = bkde (x, kernel=\"epanech\")\nplot(est, type=\"l\")\n\n#kernel density plot\n#sLB = ggplot (df_ND_m, aes(B_rate)) +geom_line(stat =\"density\", kernel = \"epanechnikov\")\n\n# estimate the regression function \n#x = df_ND_m$Age\n#y = df_ND_m$B_rate\n#plot(x,y)\n#h <- dpill(x, y)\n#fit <- locpoly(x, y, bandwidth = h)\n#lines(fit)\n\n#SURVEILLANCE METRICS\ndf = read.csv(\"~/Desktop/STAT_project/surveil.csv\")\n\n# replace NaN with mean for that group\nimpute.mean = function(x) replace(x, is.na(x), mean(x, na.rm = TRUE))\ndf_m <- ddply(df, ~ Year, transform, value = impute.mean(value))\n\n#subset the dataframe on conditions\ndf_ND_multi = subset(df_m, Metric==\"multi\")\ndf_ND_cxld = subset(df_m, Metric==\"cxld\")\ndf_ND_multi$row.names = NULL\ndf_ND_cxld$row.names = NULL\n\n\n#kernel density plot\nx = df_ND_multi$value\nest = bkde (x, kernel=\"epanech\")\nplot(est, type=\"l\")\n\nx = df_ND_cxld$value\nest = bkde (x, kernel=\"normal\")\nplot(est, type=\"l\")\n",
+    "created" : 1398641944514.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3264929845",
+    "id" : "88578AB6",
+    "lastKnownWriteTime" : 1398660992,
+    "path" : "~/Desktop/STAT_project/STAT_W4701_proj_R/gg_den_plot.R",
+    "project_path" : "gg_den_plot.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "source_on_save" : false,
+    "type" : "r_source"
+}

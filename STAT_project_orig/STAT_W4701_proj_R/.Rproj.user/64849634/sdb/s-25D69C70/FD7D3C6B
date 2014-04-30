@@ -1,0 +1,17 @@
+{
+    "contents" : "library (plyr)\n# ref http://data.princeton.edu/R/glms.html\n\n#SUCCESS METRICS\ndf = read.csv(\"~/Desktop/STAT_project/sLB.csv\")\n\n#subset the dataframe on conditions\ndf_ND = subset(df, Donor==0)\ndf_ND = subset (df, Age < 46)\ndf_ND$row.names = NULL\n\n# replace NA with mean for that group\nimpute.mean = function(x) replace(x, is.na(x), mean(x, na.rm = TRUE))\ndf_ND_m <- ddply(df_ND, ~ Year, transform, B_rate = impute.mean(B_rate))\n\n# estimate a generalized linear model\ngam_fit = glm (B_rate ~ log(Age), data = df_ND_m, family = Gamma)\n\nsummary(gam_fit)\n\nplot(gam_fit)\n\n\n#SURVEILLANCE METRICS\ndf = read.csv(\"~/Desktop/STAT_project/surveil.csv\")\n\n# replace NaN with mean for that group\nimpute.mean = function(x) replace(x, is.na(x), mean(x, na.rm = TRUE))\ndf_m <- ddply(df, ~ Year, transform, value = impute.mean(value))\n\n#subset the dataframe on conditions\ndf_ND_multi = subset(df_m, Metric==\"multi\")\ndf_ND_cxld = subset(df_m, Metric==\"cxld\")\ndf_ND_multi$row.names = NULL\ndf_ND_cxld$row.names = NULL\n\n# estimate a generalized linear model\ngam_fit = glm (value ~ log(Age), data = df_ND_multi, family = Gamma)\n\nsummary(gam_fit)\n\nplot(gam_fit)",
+    "created" : 1398649480362.000,
+    "dirty" : true,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2690124993",
+    "id" : "FD7D3C6B",
+    "lastKnownWriteTime" : 1398660983,
+    "path" : "~/Desktop/blogpost3/citibike/glm.R",
+    "project_path" : null,
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "source_on_save" : false,
+    "type" : "r_source"
+}
